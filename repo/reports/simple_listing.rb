@@ -92,6 +92,7 @@ module PrawnReport
 
     def new_page
       super
+      draw_group_header if grouped? and @report_params[:group][:header_reprint_new_page] and !last_group_summary?
       draw_column_titles unless (!draw_group_column_titles? && !@printing_internal) || last_group_summary?
     end
 
