@@ -90,10 +90,12 @@ module PrawnReport
     end
     
 
-    def new_page
-      super
-      draw_group_header if grouped? and @report_params[:group][:header_reprint_new_page] and !last_group_summary?
-      draw_column_titles unless (!draw_group_column_titles? && !@printing_internal) || last_group_summary?
+    def new_page(print_titles = true)
+      super      
+      draw_group_header if grouped? and @report_params[:group][:header_reprint_new_page] and !last_group_summary?      
+      if print_titles        
+        draw_column_titles unless (!draw_group_column_titles? && !@printing_internal) || last_group_summary?
+      end
     end
 
     protected
@@ -188,7 +190,7 @@ module PrawnReport
         if(@grouping_info[:groups_running] &&
                      @grouping_info[:last_group_value] != group_value)
           draw_group_summary
-          new_page if params[:group][:new_page]
+          new_page(false) if params[:group][:new_page]
         end
         @grouping_info[:last_group_value] = group_value
         @grouping_info[:groups_running] = true
@@ -199,7 +201,7 @@ module PrawnReport
     end
     
     def draw_column_titles
-      super_new_page unless fits?(30)
+      new_page(false) unless fits?(30)
       if @report_params[:field]
         render_one_column_title
       elsif @report_params[:columns]

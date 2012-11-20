@@ -82,7 +82,7 @@ module PrawnReport
       @pdf.render
     end
     
-    def new_page
+    def new_page(print_titles = true)
       draw_footer
       
       @num_pages += 1
